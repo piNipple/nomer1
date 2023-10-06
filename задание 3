@@ -1,0 +1,33 @@
+function spavn!(r,Sud) # в югозапад
+    while ! isborder(r,Sud)
+        move!(r,Sud)
+    end
+    while ! isborder(r,West)
+        move!(r,West)
+    end
+end
+
+inverse(side::HorizonSide)::HorizonSide=HorizonSide(mod(Int(side)+2,4))
+
+function f_border!(r)
+    spavn!(r,Sud)
+    putmarker!(r)
+    side=Ost
+    while f_row!(r,side)==false
+        move!(r,Nord)
+        putmarker!(r)
+        side=inverse(side)
+    end
+    while ! isborder(r,Ost)
+        move!(r,Ost)
+        putmarker!(r)
+    end
+end
+
+function f_row!(r,side)
+    while ! isborder(r,Nord) && ! isborder(r,side)
+        move!(r,side)
+        putmarker!(r)
+    end
+    return isborder(r,Nord)
+end
