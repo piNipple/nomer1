@@ -1,16 +1,14 @@
-using HorizonSideRobots
-r = Robot(animate=true)
-
-function spavn!(r,side)
-    while ! isborder(r,side)
-        move!(r,side)
+function spavn!(r,Sud)
+    while ! isborder(r,Sud)
+        move!(r,Sud)
+    end
+    while ! isborder(r,West)
+        move!(r,West)
     end
 end
 
-spavn!(r, Sud)
-spavn!(r, West)
-
 function perim!(r)
+    spavn!(r,Sud)
     for side in (Nord, Ost, Sud, West)
         while ! isborder(r,side)
             putmarker!(r)
