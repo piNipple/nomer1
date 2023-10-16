@@ -1,0 +1,39 @@
+inverse(side::HorizonSide)::HorizonSide=HorizonSide(mod(Int(side)+2,4))
+
+function krest!(r)
+    for side in ((Nord, West), (Nord, Ost), (Sud, West), (Sud, Ost))
+        ns = 0
+        while ! isborder(r,side) # если нет границ у 2 стороны
+            ns+=mn!(r,s)
+        end
+        putmarker!(r)
+        gb!(r,side::Tuple,ns)
+    end
+end
+
+function border!(r,side::Tuple) # проверяет границы
+    s1,s2 = side
+    if (isborder(r,s1)==1) && (isborder(r,s2)==1) # если есть граница то true
+        return true
+    else
+        return false # если нету то false
+    end
+end
+
+function mn!(r,side::Tuple)
+    ns=0
+    putmarker!(r)
+    for s in side
+        move!(r,s)
+        ns+=1
+    end
+    return ns//2
+end
+
+function gb!(r,side::Tuple,ns)
+    for _ in range(0,ns-1)
+        for s in side 
+            move!(r,inverse(s))
+        end
+    end
+end
