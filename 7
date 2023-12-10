@@ -1,24 +1,22 @@
-inverse_side(side::HorizonSide) = HorizonSide(mod(Int(side)+2,4))
-left(side::HorizonSide) = HorizonSide(mod(Int(side)+1,4))
+using HorizonSideRobots
+r=Robot(animate=true)
 
-function mt!(r,side_border)
-    n = 0
-    side = left(side_border)
-    while isborder(r,side_border)
+inverse(side::HorizonSide)::HorizonSide=HorizonSide(mod(Int(side)+2,4))
+
+function dirka!(r)
+    n = 1
+    s = Ost
+    while isborder(r, Nord)
+        nm!(r, s, n)
         n += 1
-        move_n!(r,side,n)
-        side = inverse_side(side)
+        s = inverse(s)
     end
-    move!(r,side_border)
-    move_n!(r, side, div((n+1),2))
-
 end
 
-
-function move_n!(r, side::HorizonSide, n)
-    for x in 1:n
-        move!(r,side)
-    end    
+function nm!(r, s, n)
+    for i in 1:n
+        if !isborder(r, s)
+            move!(r, s)
+        end
+    end
 end
-
-mt!(r,Nord)
