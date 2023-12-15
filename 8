@@ -1,31 +1,24 @@
-inverse_side(side::HorizonSide) = HorizonSide(mod(Int(side)+2,4))
-left(side::HorizonSide) = HorizonSide(mod(Int(side)+1,4))
+using HorizonSideRobots
+r = Robot(animate = true)
 
-function find_marker!(robot)
-    side = Nord
-    n = 0 
-    flag = true
-    while !find_marker!(robot,side,n) 
-        if flag
-            n = n + 1
+left(side::HorizonSide)::HorizonSide=HorizonSide(mod(Int(side)+1,4))
+
+function findmark!(r)
+    side = Ost
+    shag = 1
+    while  ! ismarker(r)
+        for i in 1:2
+            mov!(robot, side, shag)
+            side = left(side)
         end
-        flag  = !flag
-        side = left(side)
+        shag += 1
     end
 end
 
-function  find_marker!(robot,side,max_num_steps)
-    for _ in 1:max_num_steps
-        if ismarker(robot)
-            return true
-        end            
-        move!(robot,side)         
+function mov!(robot, side, num)
+    for i in 1:num
+        if !ismarker(robot)
+            move!(robot, side)
+        end
     end
-    return false            
-end
-
-function move_n!(robot, side::HorizonSide, n)
-    for _ in 1:n
-        move!(robot,side)
-    end    
 end
