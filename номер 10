@@ -1,33 +1,36 @@
-function task10(robot,n)
-        n1,n2 = goangle_andcount!(robot,Sud,West)
-        side = Ost
-        flag = true
-        while !isborder(robot,Nord)
-           for _ in range(1,n)
-            !flag && move_n!(robot,side,n)
-            markchessrow_n!(robot,n,side)
-            move_andcount!(robot,inverse(side))
-            if !isborder(robot,Nord)
-                move!(robot,Nord)
-            end
-           end
-           flag = !flag
+using HorizonSideRobots
+r = Robot(animate = true)
+
+function final!(robot,n)
+    n1,n2 = goangle_andcount!(robot,Sud,West)
+    side = Ost
+    flag = true
+    while !isborder(robot,Nord)
+       for _ in range(1,n)
+        !flag && move_n!(robot,side,n)
+        markchessrow_n!(robot,n,side)
+        move_andcount!(robot,inverse(side))
+        if !isborder(robot,Nord)
+            move!(robot,Nord)
         end
-        goangle_andcount!(robot,Sud,West)
-        goback!(robot,n1,n2,Nord,Ost)
+       end
+       flag = !flag
+    end
+    goangle_andcount!(robot,Sud,West)
+    goback!(robot,n1,n2,Nord,Ost)
 end
 
 function markchessrow_n!(robot, n,side)
-    flag = false
-        while !isborder(robot, side)
-            for _ in range(1,n)
-                !flag && putmarker!(robot)
-                if !isborder(robot,side)
-                    move!(robot,side)
-                end
+flag = false
+    while !isborder(robot, side)
+        for _ in range(1,n)
+            !flag && putmarker!(robot)
+            if !isborder(robot,side)
+                move!(robot,side)
             end
-            flag = !flag
         end
+        flag = !flag
+    end
 end
 
 function goangle_andcount!(robot::Robot,side1::HorizonSide,side2::HorizonSide)
@@ -64,5 +67,3 @@ function move_andcount!(robot::Robot, side::HorizonSide)
 end
 
 inverse(side::HorizonSide) = HorizonSide(mod(Int(side)+2,4))
-
-task10(robot,)
